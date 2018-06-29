@@ -82,3 +82,44 @@ JYSlideSegmentController
 @property(readonly) Class superclass;
 ```
 ### 5.创建tweak工程来实现以上猜测
+```
+ 创建tweak工程
+ $THEOS/bin/nic.pl
+ Choose a Template (required): 11
+ Project Name (required): WeiboFunTweak
+ Package Name [com.yourcompany.weibofuntweak]: com.iosre.WeiboFunTweak    //deb包的名字（类似于bundle identifier)
+ Author/Maintainer Name [Crassus]: Crassus
+ [iphone/tweak] MobileSubstrate Bundle filter [com.apple.springboard]: com.lunchsoft.weibofun   // tweak作用对象的bundle identifier，上面第4步已经获取到 
+ [iphone/tweak] List of applications to terminate upon installation (space-separated, '-' for none) [SpringBoard]: WeiboFun  // tweak安装完成后需要重启的应用
+```
+
+- thoes模块Logify来精确定位消息响应方法
+在Tweak 目录下执行以下命令批量生成相关代码
+```
+THEOS/bin/logify.pl ../WeiboFunHeaders/WFSlideSegmentController.h > Tweak.xm
+```
+- 执行安装命令,并注释掉会导致冲突的代码
+```
+首次执行
+make
+make install
+make package // 在手机上打包
+```
+### 6.开启监听打印log信息
+监听手机打印log信息：tail -f /var/log/syslog | grep SpringBoard  // tail命令不可用，通过cydia 安装core utilities
+Ios10系统日志变更
+使用deviceconsole解决
+	http://qinken.site/2017/07/iOS10%E4%B8%8B%E6%89%93%E5%8D%B0NSLog-syslog%E4%BF%A1%E6%81%AF/
+https://github.com/MegaCookie/deviceconsole  
+比如打印iOSRETargetApp这个app的信息，可用deviceconsole -i -f iOSRETargetApp命令
+或者Mac安装工具./cinject -w 查看日志信息
+### 7.打印日志分析代码验证，最终确定只要把此代码返回YES，广告页面就不再显示
+
+```
+- (_Bool )shouldHideAd { 
+	%log; 
+	_Bool  r = %orig; 
+	HBLogDebug(@"iOSRE:shouldHideAd = %d", r); 
+	return YES; 
+ }
+```
