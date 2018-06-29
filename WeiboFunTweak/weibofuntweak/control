@@ -1,0 +1,9 @@
+Package: com.iosre.weibofuntweak
+Name: WeiboFunTweak
+Depends: mobilesubstrate
+Version: 0.0.1
+Architecture: iphoneos-arm
+Description: An awesome MobileSubstrate tweak!
+Maintainer: Crassus
+Author: Crassus
+Section: Tweaks
