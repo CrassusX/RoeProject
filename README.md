@@ -50,4 +50,35 @@ _autolayoutTrace - recursiveDescription的简化版，去掉了UIView的一些�
 
 CFBundleIdentifier = "com.lunchsoft.weibofun";
 
+``
+- 通过分析视图结构 WFSlideSegmentController控制器有广告视图AdViewViewImpl
+查找解析头文件含有该类
+find -H WFSlideSegmentController*
+JYSlideSegmentController
+
+发现WFSlideSegmentController 有属性_shouldHideAd 和 广告代理 LSBannerAdManagerDelegate
+假设通过设置_shouldHideAd = YES 是否就能够实现关闭广告
 ```
+@interface WFSlideSegmentController : JYSlideSegmentController <LSBannerAdManagerDelegate>
+{
+    _Bool _shouldAdjustUI;
+    _Bool _shouldHideAd;
+}
+
+- (void)adjustTheme:(id)arg1;
+- (void)adjustViewColors;
+- (void)dealloc;
+- (void)getMoney;
+@property(nonatomic) _Bool shouldHideAd; // @synthesize shouldHideAd=_shouldHideAd;
+- (void)viewDidAppear:(_Bool)arg1;
+- (void)viewDidLoad;
+- (void)viewWillAppear:(_Bool)arg1;
+- (void)viewWillDisappear:(_Bool)arg1;
+
+// Remaining properties
+@property(readonly, copy) NSString *debugDescription;
+@property(readonly, copy) NSString *description;
+@property(readonly) unsigned long long hash;
+@property(readonly) Class superclass;
+```
+### 5.创建tweak工程来实现以上猜测
