@@ -50,7 +50,7 @@ _autolayoutTrace - recursiveDescription的简化版，去掉了UIView的一些�
 
 CFBundleIdentifier = "com.lunchsoft.weibofun";
 
-``
+```
 - 通过分析视图结构 WFSlideSegmentController控制器有广告视图AdViewViewImpl
 查找解析头文件含有该类
 find -H WFSlideSegmentController*
