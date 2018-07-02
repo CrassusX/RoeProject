@@ -5,6 +5,7 @@ ps -e
 ```
 找到app信息:/var/containers/Bundle/Application/417CCB95-B920-44B8-AB9B-ECD495E628A1/WeiboFun.app/WeiboFun
 
+
 ## 2.砸壳：
 ```
 // 注入程序执行下面获取沙盒目录
@@ -34,6 +35,7 @@ scp -P 2222 root@localhost:/var/mobile/Containers/Data/Application/B5286EAD-07D8
 ```
 class-dump -s -S -H WeiboFun.decrypted -o ./WeiboFunHeaders
 ```
+
 ## 4.界面分析（借助工具Reval或者cycript）
 cycript（http://www.cycript.org/）
 此刻终端连接手机，app处于打开状态
@@ -81,6 +83,7 @@ JYSlideSegmentController
 @property(readonly) unsigned long long hash;
 @property(readonly) Class superclass;
 ```
+
 ### 5.创建tweak工程来实现以上猜测
 ```
  创建tweak工程
@@ -105,6 +108,7 @@ make
 make install
 make package // 在手机上打包
 ```
+
 ### 6.开启监听打印log信息
 监听手机打印log信息：tail -f /var/log/syslog | grep SpringBoard  // tail命令不可用，通过cydia 安装core utilities
 Ios10系统日志变更
@@ -113,6 +117,7 @@ Ios10系统日志变更
 https://github.com/MegaCookie/deviceconsole  
 比如打印iOSRETargetApp这个app的信息，可用deviceconsole -i -f iOSRETargetApp命令
 或者Mac安装工具./cinject -w 查看日志信息
+
 ### 7.打印日志分析代码验证，最终确定只要把此代码返回YES，广告页面就不再显示
 
 ```
@@ -123,3 +128,10 @@ https://github.com/MegaCookie/deviceconsole  
 	return YES; 
  }
 ```
+
+### 8.尝试插件化打包，重新签名App到非越狱手机上使用
+AppStore下载Keka，修改deb包文件后缀为zip，并通过Keka解压缩后得到WeiboFunTweak.dylib和WeiboFunTweak.plist两个文件。
+参考[免越狱iOS插件注入](https://www.jianshu.com/p/8236249edd35)
+            
+
+
